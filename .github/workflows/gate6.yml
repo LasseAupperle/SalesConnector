@@ -1,0 +1,41 @@
+name: "Gate 6: update visibility + one-click update"
+
+# Manual gate (specs/04 §5): with the v0.9.0-test release published on the
+# public repo, a wp-env shop running an older version must see the update
+# and update to it in one click. Run via workflow_dispatch whenever a new
+# test release needs verifying.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-check:
+    name: wp-env sees and installs the GitHub release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Node dependencies
+        run: npm install
+      - name: Start wp-env
+        run: npm run env:start
+      - name: Activate plugin (mapped source = older version)
+        run: |
+          npx wp-env run cli wp plugin activate launchup-sales-connector
+          npx wp-env run cli wp plugin get launchup-sales-connector --field=version
+      - name: "Gate 6: update checker reports the v0.9.0-test release"
+        run: npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase6-update-check.php
+      - name: "Gate 6: one-click update succeeds"
+        run: |
+          npx wp-env run cli wp plugin update launchup-sales-connector
+          version=$(npx wp-env run cli wp plugin get launchup-sales-connector --field=version | tr -d '[:space:]')
+          echo "version after update: $version"
+          if [ "$version" != "0.9.0" ]; then
+            echo "FAIL: expected 0.9.0 after update, got $version"
+            exit 1
+          fi
+      - name: Stop wp-env
+        if: always()
+        run: npm run env:stop
