@@ -1,9 +1,10 @@
 name: "Gate 6: update visibility + one-click update"
 
-# Manual gate (specs/04 §5): with the v0.9.0-test release published on the
-# public repo, a wp-env shop running an older version must see the update
-# and update to it in one click. Run via workflow_dispatch whenever a new
-# test release needs verifying.
+# Manual gate (specs/04 §5): a shop running the v0.7.0 release must see the
+# v0.9.0-test release as an update and one-click update to it. The plugin is
+# installed from the real release zip (as creator shops do) instead of the
+# repo mapping — WordPress cannot delete a bind-mounted plugin directory, so
+# updating the mapped copy can never succeed. Run via workflow_dispatch.
 
 on:
   workflow_dispatch:
@@ -19,14 +20,25 @@ jobs:
           node-version: '20'
       - name: Install Node dependencies
         run: npm install
+      - name: Drop the source mapping (install from the release zip instead)
+        run: |
+          cat > .wp-env.override.json <<'JSON'
+          {
+            "mappings": {
+              "wp-content/lusc-tests": "./plugin/tests"
+            }
+          }
+          JSON
       - name: Start wp-env
         run: npm run env:start
-      - name: Activate plugin (mapped source = older version)
+      - name: Install the v0.7.0 release zip (as a creator shop would)
         run: |
-          npx wp-env run cli wp plugin activate launchup-sales-connector
-          npx wp-env run cli wp plugin get launchup-sales-connector --field=version
+          npx wp-env run cli wp plugin install "https://github.com/LasseAupperle/SalesConnector/releases/download/v0.7.0/launchup-sales-connector.zip" --activate
+          version=$(npx wp-env run cli wp plugin get launchup-sales-connector --field=version | tr -d '[:space:]')
+          echo "installed version: $version"
+          test "$version" = "0.7.0"
       - name: "Gate 6: update checker reports the v0.9.0-test release"
-        run: npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase6-update-check.php
+        run: npx wp-env run cli wp eval-file wp-content/lusc-tests/cli/phase6-update-check.php
       - name: "Gate 6: one-click update succeeds"
         run: |
           npx wp-env run cli wp plugin update launchup-sales-connector
@@ -36,6 +48,7 @@ jobs:
             echo "FAIL: expected 0.9.0 after update, got $version"
             exit 1
           fi
+          npx wp-env run cli wp plugin is-active launchup-sales-connector
       - name: Stop wp-env
         if: always()
         run: npm run env:stop
