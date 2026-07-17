@@ -42,7 +42,9 @@ jobs:
       - name: Start wp-env
         run: npm run env:start
       - name: Activate plugin
-        run: npx wp-env run cli wp plugin activate launchup-sales-connector
+        run: |
+          npx wp-env run cli wp plugin activate launchup-sales-connector
+          npx wp-env run cli wp plugin list
       - name: Enable HPOS (custom order tables)
         run: npx wp-env run cli wp option update woocommerce_custom_orders_table_enabled yes
       - name: "Gate 0: plugin active + HPOS compatible (with WooCommerce)"
@@ -51,9 +53,8 @@ jobs:
         run: npx wp-env run cli wp eval "\$log = '/var/www/html/wp-content/debug.log'; if (file_exists(\$log) && strpos(file_get_contents(\$log), 'launchup-sales-connector') !== false) { echo file_get_contents(\$log); exit(1); } echo 'debug.log clean for the plugin';"
       - name: "Gate 0: deactivating WooCommerce shows guard notice, no fatal"
         run: |
-          npx wp-env run cli wp plugin deactivate woocommerce
+          npx wp-env run cli wp plugin deactivate --all --exclude=launchup-sales-connector
           npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/guard-check.php
-          npx wp-env run cli wp plugin activate woocommerce
       - name: Stop wp-env
         if: always()
         run: npm run env:stop
