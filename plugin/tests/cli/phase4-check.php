@@ -110,15 +110,15 @@ $GLOBALS['lusc_mock_reply'] = new WP_Error( 'http_request_failed', 'connection r
 $lusc_scheduler->handleDaily();
 $lusc_next_retry = as_next_scheduled_action( Scheduler::HOOK_RETRY, null, Scheduler::GROUP );
 $lusc_assert( $lusc_next_retry === $lusc_pinned + 300, 'first retry must be at +5 min' );
-as_unschedule_all_actions( Scheduler::HOOK_RETRY, array(), Scheduler::GROUP );
+as_unschedule_all_actions( Scheduler::HOOK_RETRY );
 
 $lusc_scheduler->handleRetry( 'daily', 2 );
 $lusc_assert( as_next_scheduled_action( Scheduler::HOOK_RETRY, null, Scheduler::GROUP ) === $lusc_pinned + 1800, 'second retry must be at +30 min' );
-as_unschedule_all_actions( Scheduler::HOOK_RETRY, array(), Scheduler::GROUP );
+as_unschedule_all_actions( Scheduler::HOOK_RETRY );
 
 $lusc_scheduler->handleRetry( 'daily', 3 );
 $lusc_assert( as_next_scheduled_action( Scheduler::HOOK_RETRY, null, Scheduler::GROUP ) === $lusc_pinned + 7200, 'third retry must be at +2 h' );
-as_unschedule_all_actions( Scheduler::HOOK_RETRY, array(), Scheduler::GROUP );
+as_unschedule_all_actions( Scheduler::HOOK_RETRY );
 
 $lusc_scheduler->handleRetry( 'daily', 4 );
 $lusc_assert( false === as_next_scheduled_action( Scheduler::HOOK_RETRY, null, Scheduler::GROUP ), 'ladder must stop after the 3rd retry' );
@@ -135,7 +135,7 @@ $lusc_assert( 0 === $lusc_store->read()['consecutive_failures'], 'success must r
 
 // Oldest counted order overall = synthetic 2026-01 → single clamped chunk
 // [2026-01, 2026-05) with 4 periods (Jan/Feb/Mar synthetic + Apr fixture).
-as_unschedule_all_actions( Scheduler::HOOK_PUSH_NOW, array(), Scheduler::GROUP );
+as_unschedule_all_actions( Scheduler::HOOK_PUSH_NOW );
 $GLOBALS['lusc_mock_requests'] = array();
 
 $lusc_scheduler->handleBackfillChunk( 0, 6 );
