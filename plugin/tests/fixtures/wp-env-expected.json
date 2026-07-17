@@ -1,0 +1,52 @@
+[
+    {
+        "createdAt": "2026-04-05 10:00:00 +02:00",
+        "status": "completed",
+        "items": [
+            {
+                "product": "Fixture Shirt",
+                "quantity": 2,
+                "lineTotalExTax": 40
+            },
+            {
+                "product": "Fixture Mok",
+                "quantity": 1,
+                "lineTotalExTax": 12
+            }
+        ],
+        "refundLines": [],
+        "unallocatedRefundExTax": 0
+    },
+    {
+        "createdAt": "2026-05-10 11:00:00 +02:00",
+        "status": "processing",
+        "items": [
+            {
+                "product": "Fixture Shirt",
+                "quantity": 3,
+                "lineTotalExTax": 60
+            }
+        ],
+        "refundLines": [
+            {
+                "product": "Fixture Shirt",
+                "quantity": 1,
+                "amountExTax": 20
+            }
+        ],
+        "unallocatedRefundExTax": 0
+    },
+    {
+        "createdAt": "2026-06-02 09:00:00 +02:00",
+        "status": "completed",
+        "items": [
+            {
+                "product": "Fixture Mok",
+                "quantity": 1,
+                "lineTotalExTax": 12
+            }
+        ],
+        "refundLines": [],
+        "unallocatedRefundExTax": 5
+    }
+]
