@@ -3,7 +3,7 @@
  * Plugin Name:       Launch Up Sales Connector
  * Plugin URI:        https://github.com/LasseAupperle/SalesConnector
  * Description:       Aggregates WooCommerce sales per month and pushes them to Launch Hub. No customer data ever leaves the shop.
- * Version:           0.1.0
+ * Version:           0.2.0
  * Author:            Launch Up
  * Author URI:        https://launch-up.nl
  * License:           GPL-2.0-or-later
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'LUSC_VERSION', '0.1.0' );
+define( 'LUSC_VERSION', '0.2.0' );
 define( 'LUSC_PLUGIN_FILE', __FILE__ );
 
 /*

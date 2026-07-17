@@ -1,0 +1,48 @@
+{
+    "contract": "1.1",
+    "shop_identifier": "https://shopnaam.nl",
+    "shop_name": "esoo Merch",
+    "api_key": "lu_sk_TESTKEY1234567890AB",
+    "periods": [
+        {
+            "period_start": "2026-05-01",
+            "period_end": "2026-05-31",
+            "revenue": 115,
+            "orders": 2,
+            "avg_order_value": 57.5,
+            "items_total": 5,
+            "products": [
+                {
+                    "name": "esoo Shirt zwart",
+                    "quantity": 4,
+                    "revenue": 80
+                },
+                {
+                    "name": "esoo Hoodie",
+                    "quantity": 1,
+                    "revenue": 35
+                }
+            ]
+        },
+        {
+            "period_start": "2026-06-01",
+            "period_end": "2026-06-30",
+            "revenue": 60,
+            "orders": 2,
+            "avg_order_value": 30,
+            "items_total": 4,
+            "products": [
+                {
+                    "name": "esoo Shirt zwart",
+                    "quantity": 2,
+                    "revenue": 40
+                },
+                {
+                    "name": "esoo Mok",
+                    "quantity": 2,
+                    "revenue": 24
+                }
+            ]
+        }
+    ]
+}

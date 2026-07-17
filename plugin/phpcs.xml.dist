@@ -15,6 +15,14 @@
 	<rule ref="WordPress">
 		<!-- PSR-4 class files (ClassName.php) instead of WP's class-name.php. -->
 		<exclude name="WordPress.Files.FileName"/>
+		<!--
+			The DTO/engine contracts in specs/01 are canonical and camelCase
+			($parentProductId, toPayload(), …); they may not be renamed
+			unilaterally (CLAUDE.md ground rules). WP-style snake_case is
+			still used for hooks, options, and global functions (lusc_*).
+		-->
+		<exclude name="WordPress.NamingConventions.ValidVariableName"/>
+		<exclude name="WordPress.NamingConventions.ValidFunctionName"/>
 	</rule>
 
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
