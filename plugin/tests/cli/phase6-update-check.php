@@ -9,21 +9,16 @@
  * @package LaunchUp\SalesConnector
  */
 
-use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
-
 $lusc_fail = static function ( $msg ) {
 	fwrite( STDERR, "PHASE6 FAIL: {$msg}\n" );
 	exit( 1 );
 };
 
-require_once WP_PLUGIN_DIR . '/launchup-sales-connector/lib/plugin-update-checker/plugin-update-checker.php';
-
-$lusc_checker = PucFactory::buildUpdateChecker(
-	\LaunchUp\SalesConnector\Updater::REPO_URL,
-	WP_PLUGIN_DIR . '/launchup-sales-connector/launchup-sales-connector.php',
-	'launchup-sales-connector'
-);
-$lusc_checker->getVcsApi()->enableReleaseAssets();
+// Reuse the checker built in lusc_boot() — PUC slugs must be unique.
+$lusc_checker = \LaunchUp\SalesConnector\Updater::checker();
+if ( null === $lusc_checker ) {
+	$lusc_fail( 'boot-time update checker not registered.' );
+}
 
 $lusc_checker->checkForUpdates();
 $lusc_update = $lusc_checker->getUpdate();
