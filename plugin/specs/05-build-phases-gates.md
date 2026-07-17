@@ -2,7 +2,7 @@
 
 Same rules as the Launch Hub project: strict order, a phase is done only when its gate **ran and passed** (paste output in the PR), one tagged commit/PR per phase, ask Lasse on ambiguity.
 
-> **Dependency callout:** the Launch Hub addendum (`../hub-addendum/specs/14`) phases **A0 + A1 must be live** (at least on a staging Supabase) before plugin **phase 7**; phases 0-6 run fully standalone against fixtures/mocks.
+> **Dependency callout:** the Launch Hub addendum (launch-hub repo, `specs/14`) phases **A0 + A1 must be live** (at least on a staging Supabase) before plugin **phase 7**; phases 0-6 run fully standalone against fixtures/mocks.
 
 ## Phase 0 · Scaffold & CI
 Repo init, plugin skeleton (headers per specs/02 §5, HPOS declaration, WC-inactive guard, empty includes), composer (phpunit, wpcs/phpcs, dealerdirect installer), `.wp-env.json` (WP 6.9, latest WooCommerce, PHP 8.1), GitHub Actions `ci.yml` (phpcs + phpunit on PHP 8.1 and 8.3), GPL license, README stub.

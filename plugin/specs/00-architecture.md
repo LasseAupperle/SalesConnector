@@ -20,7 +20,7 @@ Action Scheduler ──▶ Scheduler
 
 Separation rule: `PeriodAggregator` and its DTOs import **nothing** from WordPress/WooCommerce. `OrderSource` is the only class touching WC. `PushClient` is the only class doing HTTP. Adding a metric later = extend DTO + aggregator + payload additively.
 
-## 2. Ingest contract v1.1 (single source of truth: hub-addendum specs/14 §3 — keep this copy in sync manually)
+## 2. Ingest contract v1.1 (single source of truth: launch-hub repo specs/14 §3 — keep this copy in sync manually)
 
 `POST {ingest_url}` with JSON:
 

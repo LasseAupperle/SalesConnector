@@ -2,7 +2,7 @@
 
 WordPress plugin (`launchup-sales-connector`) installed on **every creator WooCommerce shop** of Launch Up. It aggregates sales per month and pushes them to Launch Hub's existing `sales-ingest` Edge Function. It is deliberately a **dumb data pump**: it knows nothing about profit prices, contracts, or creators, and **no customer data ever leaves the shop** — only per-product quantities, revenue totals, and the shop name.
 
-**This file is the hub.** Read the spec for a component before touching it. Build order and gates: `specs/05-build-phases-gates.md`. The Launch Hub side of this project lives in `../hub-addendum/` and must be applied to the launch-hub repo **before** plugin phases 3+ can run end-to-end.
+**This file is the hub.** Read the spec for a component before touching it. Build order and gates: `specs/05-build-phases-gates.md`. The Launch Hub side of this project lives in the (private) launch-hub repo as `specs/14-sales-winst-extension.md` and must be built there (phases A0+A1) **before** plugin phase 7 can run end-to-end.
 
 ## Spec index
 
