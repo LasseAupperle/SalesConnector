@@ -61,10 +61,14 @@ jobs:
         run: npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase3-check.php
       - name: "Gate 4: scheduler, retry ladder, backfill (real Action Scheduler)"
         run: npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase4-check.php
-      - name: "Gate 4: deactivation unschedules all lusc actions"
+      - name: "Gate 5: settings save/validate, AJAX wiring, nl_NL, footprint"
+        run: npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase5-check.php
+      - name: "Gate 4+5: deactivation unschedules, uninstall removes all traces"
         run: |
           npx wp-env run cli wp plugin deactivate launchup-sales-connector
           npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase4-deactivation-check.php
+          npx wp-env run cli wp plugin uninstall launchup-sales-connector --skip-delete
+          npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase5-uninstall-check.php
           npx wp-env run cli wp plugin activate launchup-sales-connector
       - name: "Gate 0: no PHP errors from the plugin in debug.log"
         run: npx wp-env run cli wp eval "\$log = '/var/www/html/wp-content/debug.log'; if (file_exists(\$log) && strpos(file_get_contents(\$log), 'launchup-sales-connector') !== false) { echo file_get_contents(\$log); exit(1); } echo 'debug.log clean for the plugin';"

@@ -4,6 +4,7 @@
 
 	<file>includes</file>
 	<file>launchup-sales-connector.php</file>
+	<file>uninstall.php</file>
 
 	<arg name="extensions" value="php"/>
 	<arg name="colors"/>
@@ -30,6 +31,15 @@
 			<property name="prefixes" type="array">
 				<element value="lusc"/>
 				<element value="LaunchUp\SalesConnector"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- manage_woocommerce is registered by WooCommerce (a declared dependency). -->
+	<rule ref="WordPress.WP.Capabilities">
+		<properties>
+			<property name="custom_capabilities" type="array">
+				<element value="manage_woocommerce"/>
 			</property>
 		</properties>
 	</rule>

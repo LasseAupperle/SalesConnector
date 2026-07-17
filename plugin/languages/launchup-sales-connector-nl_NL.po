@@ -1,0 +1,206 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Launch Up Sales Connector\n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: launchup-sales-connector.php:68
+msgid "Launch Up Sales Connector requires WooCommerce to be installed and active. The plugin does nothing until WooCommerce is activated."
+msgstr "Launch Up Sales Connector vereist dat WooCommerce geïnstalleerd en actief is. De plugin doet niets totdat WooCommerce is geactiveerd."
+
+#: includes/PushClient.php:100
+msgid "OK"
+msgstr "OK"
+
+#. translators: %d: HTTP status code.
+#: includes/PushClient.php:107
+msgid "Unexpected response (HTTP %d)"
+msgstr "Onverwacht antwoord (HTTP %d)"
+
+#: includes/PushClient.php:131
+msgid "API key invalid or revoked — create a new one in Launch Hub"
+msgstr "API-key ongeldig of ingetrokken — maak een nieuwe aan in Launch Hub"
+
+#: includes/PushClient.php:133
+msgid "This key belongs to a different shop URL"
+msgstr "Deze key hoort bij een andere shop-URL"
+
+#: includes/PushClient.php:135
+msgid "Payload rejected — plugin update needed?"
+msgstr "Payload afgekeurd — plugin-update nodig?"
+
+#: includes/SettingsPage.php:147
+msgid "Launch Up Connector"
+msgstr "Launch Up Connector"
+
+#: includes/SettingsPage.php:178
+msgid "Connected ✓"
+msgstr "Verbonden ✓"
+
+#: includes/SettingsPage.php:179
+msgid "Started — the result will appear in the log."
+msgstr "Gestart — resultaat verschijnt in de log."
+
+#: includes/SettingsPage.php:180
+msgid "Push all months since the first order? This runs in the background and is safe to re-run — it also serves as a full re-sync."
+msgstr "Alle maanden sinds de eerste bestelling pushen? Dit draait op de achtergrond en kan veilig opnieuw worden uitgevoerd — het dient ook als volledige hersynchronisatie."
+
+#: includes/SettingsPage.php:181
+msgid "Request failed"
+msgstr "Verzoek mislukt"
+
+#: includes/SettingsPage.php:195
+msgid "You are not allowed to change these settings."
+msgstr "Wijzigen van deze instellingen is niet toegestaan."
+
+#: includes/SettingsPage.php:207
+msgid "The ingest URL must start with https://"
+msgstr "De ingest-URL moet beginnen met https://"
+
+#: includes/SettingsPage.php:217
+msgid "The API key format is invalid (expected lu_sk_…)."
+msgstr "Het formaat van de API-key is ongeldig (verwacht lu_sk_…)."
+
+#: includes/SettingsPage.php:245
+msgid "Settings"
+msgstr "Instellingen"
+
+#: includes/SettingsPage.php:261
+msgid "Not allowed."
+msgstr "Niet toegestaan."
+
+#: includes/SettingsPage.php:295
+msgid "Run a successful connection test first."
+msgstr "Voer eerst een geslaagde verbindingstest uit."
+
+#. translators: %s: last error message from the log.
+#: includes/SettingsPage.php:342
+msgid "Launch Up Connector cannot push to Launch Hub (%s)."
+msgstr "Launch Up Connector kan niet pushen naar Launch Hub (%s)."
+
+#: includes/SettingsPage.php:347
+msgid "Open settings"
+msgstr "Instellingen openen"
+
+#: includes/SettingsPage.php:374
+msgid "Settings saved."
+msgstr "Instellingen opgeslagen."
+
+#: includes/SettingsPage.php:381
+msgid "Connection"
+msgstr "Verbinding"
+
+#: includes/SettingsPage.php:388
+msgid "Ingest URL"
+msgstr "Ingest-URL"
+
+#: includes/SettingsPage.php:390
+msgid "Copy this from Launch Hub → contact → Deal & contract."
+msgstr "Kopieer deze uit Launch Hub → contact → Deal & contract."
+
+#: includes/SettingsPage.php:396
+msgid "API key"
+msgstr "API-key"
+
+#: includes/SettingsPage.php:398
+msgid "Defined in wp-config.php (recommended)."
+msgstr "Gedefinieerd in wp-config.php (aanbevolen)."
+
+#: includes/SettingsPage.php:405
+msgid "Show"
+msgstr "Tonen"
+
+#: includes/SettingsPage.php:407
+msgid "A key is stored. Leave empty to keep it."
+msgstr "Er is een key opgeslagen. Laat leeg om deze te behouden."
+
+#: includes/SettingsPage.php:408
+msgid "Create the key in Launch Hub → contact → Deal & contract."
+msgstr "Maak de key aan in Launch Hub → contact → Deal & contract."
+
+#: includes/SettingsPage.php:415
+msgid "Save"
+msgstr "Opslaan"
+
+#: includes/SettingsPage.php:416
+msgid "Test connection"
+msgstr "Test verbinding"
+
+#: includes/SettingsPage.php:422
+msgid "Actions"
+msgstr "Acties"
+
+#: includes/SettingsPage.php:425
+msgid "Push now"
+msgstr "Push nu"
+
+#: includes/SettingsPage.php:430
+msgid "Push history"
+msgstr "Historie pushen"
+
+#: includes/SettingsPage.php:432
+msgid "Push history sends all months since the first order and doubles as a full re-sync (e.g. after a late refund on an old order)."
+msgstr "Historie pushen verstuurt alle maanden sinds de eerste bestelling en dient tegelijk als volledige hersynchronisatie (bijvoorbeeld na een late terugbetaling op een oude bestelling)."
+
+#: includes/SettingsPage.php:437
+msgid "Status"
+msgstr "Status"
+
+#: includes/SettingsPage.php:440
+msgid "Last push succeeded less than 26 hours ago"
+msgstr "Laatste push minder dan 26 uur geleden geslaagd"
+
+#: includes/SettingsPage.php:441
+msgid "Last attempt failed or data is stale"
+msgstr "Laatste poging mislukt of gegevens zijn verouderd"
+
+#: includes/SettingsPage.php:442
+msgid "Never pushed yet"
+msgstr "Nog nooit gepusht"
+
+#: includes/SettingsPage.php:447
+msgid "Last success:"
+msgstr "Laatste succes:"
+
+#: includes/SettingsPage.php:449
+msgid "Last attempt:"
+msgstr "Laatste poging:"
+
+#: includes/SettingsPage.php:455
+msgid "Time"
+msgstr "Tijd"
+
+#: includes/SettingsPage.php:456
+msgid "Kind"
+msgstr "Soort"
+
+#: includes/SettingsPage.php:457
+msgid "Window"
+msgstr "Tijdvak"
+
+#: includes/SettingsPage.php:458
+msgid "Periods"
+msgstr "Periodes"
+
+#: includes/SettingsPage.php:459
+msgid "HTTP"
+msgstr "HTTP"
+
+#: includes/SettingsPage.php:460
+msgid "LU code"
+msgstr "LU-code"
+
+#: includes/SettingsPage.php:461
+msgid "Message"
+msgstr "Bericht"
+
+#: includes/SettingsPage.php:467
+msgid "No pushes yet."
+msgstr "Nog geen pushes."
+
+#: includes/SettingsPage.php:498
+msgid "Connection works! Click \"Push history\" once to send all existing months to Launch Hub."
+msgstr "Verbinding werkt! Klik één keer op \"Historie pushen\" om alle bestaande maanden naar Launch Hub te sturen."
