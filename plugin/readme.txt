@@ -6,7 +6,7 @@ Tested up to: 6.9
 Requires PHP: 8.1
 WC requires at least: 10.0
 WC tested up to: 10.0
-Stable tag: 0.7.0
+Stable tag: 0.9.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,6 +17,9 @@ Aggregates WooCommerce sales per month and pushes them to Launch Hub. No custome
 Internal Launch Up plugin installed on every creator WooCommerce shop. It aggregates sales per month (per parent product, ex VAT, net of refunds) and pushes them to Launch Hub's sales-ingest endpoint. It deliberately knows nothing about profit prices, contracts, or creators, and no customer data ever leaves the shop — only per-product quantities, revenue totals, and the shop name.
 
 == Changelog ==
+
+= 0.9.0 =
+* Test pre-release for the update pipeline (gate 6): verifies creator shops see and install GitHub-release updates.
 
 = 0.7.0 =
 * Phase 6: auto-updates from GitHub releases (plugin-update-checker v5), release pipeline, readme lint.
