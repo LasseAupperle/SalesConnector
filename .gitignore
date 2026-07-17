@@ -1,5 +1,5 @@
 node_modules/
-vendor/
+/plugin/vendor/
 .phpunit.cache/
 .phpunit.result.cache
 debug.log

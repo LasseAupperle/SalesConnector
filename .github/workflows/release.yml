@@ -1,0 +1,99 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Build and publish release zip
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Build plugin zip
+        run: |
+          set -euo pipefail
+          mkdir -p build/launchup-sales-connector
+          # Runtime allowlist only — everything else (tests/, specs/, scripts/,
+          # vendor/, composer.*, phpcs.xml.dist, phpunit.xml.dist, CLAUDE.md,
+          # dotfiles) is deliberately left behind.
+          cp    plugin/launchup-sales-connector.php build/launchup-sales-connector/
+          cp    plugin/readme.txt                   build/launchup-sales-connector/
+          cp    plugin/uninstall.php                build/launchup-sales-connector/
+          cp -r plugin/includes                     build/launchup-sales-connector/
+          cp -r plugin/lib                          build/launchup-sales-connector/
+          cp -r plugin/languages                    build/launchup-sales-connector/
+          cp -r plugin/assets                       build/launchup-sales-connector/
+          cd build
+          zip -r ../launchup-sales-connector.zip launchup-sales-connector
+
+      - name: Assert zip contents match the allowlist exactly
+        run: |
+          set -euo pipefail
+          zip=launchup-sales-connector.zip
+          echo "== zip listing =="
+          zipinfo -1 "$zip"
+
+          # (a) No excluded plugin artifact may leak. Patterns are anchored to the
+          #     plugin's OWN top level (^launchup-sales-connector/<entry>). This
+          #     matters: the bundled plugin-update-checker under lib/ legitimately
+          #     ships its own vendor/ and composer.json, and those runtime files
+          #     must NOT trip this gate — only the plugin's own excluded artifacts do.
+          excludes='^launchup-sales-connector/(tests/|specs/|scripts/|vendor/|composer\.|phpcs|phpunit|CLAUDE\.md|\.)'
+          if zipinfo -1 "$zip" | grep -Eq "$excludes"; then
+            echo "FAIL: excluded artifact leaked into the zip:"
+            zipinfo -1 "$zip" | grep -E "$excludes"
+            exit 1
+          fi
+
+          # (b) Every top-level entry inside launchup-sales-connector/ must be one
+          #     of the allowlisted names — derived from the actual zip listing and
+          #     compared against the sorted allowlist. Any extra or missing entry fails.
+          expected=$(printf '%s\n' \
+            launchup-sales-connector.php \
+            readme.txt \
+            uninstall.php \
+            includes \
+            lib \
+            languages \
+            assets | sort)
+          actual=$(zipinfo -1 "$zip" | cut -d/ -f2 | grep -v '^$' | sort -u)
+          if [ "$expected" != "$actual" ]; then
+            echo "FAIL: top-level entries do not match the allowlist exactly."
+            echo "--- expected ---"; echo "$expected"
+            echo "--- actual ---";   echo "$actual"
+            exit 1
+          fi
+
+          # (c) The zip's plugin header Version must equal the tag name with the
+          #     leading 'v' stripped. Any pre-release suffix (e.g. the spec §5
+          #     test tag v0.9.0-test) is trimmed too, since the plugin header only
+          #     carries a numeric [0-9.]+ version.
+          header=$(unzip -p "$zip" launchup-sales-connector/launchup-sales-connector.php)
+          zip_version=$(grep -m1 -oP 'Version:\s*\K[0-9.]+' <<<"$header")
+          tag_version=${GITHUB_REF_NAME#v}
+          tag_core=${tag_version%%-*}
+          if [ "$zip_version" != "$tag_core" ]; then
+            echo "FAIL: plugin header Version ($zip_version) != tag $GITHUB_REF_NAME (expected core $tag_core)"
+            exit 1
+          fi
+
+          echo "OK: allowlist exact, no excluded artifacts, Version $zip_version matches tag $GITHUB_REF_NAME"
+
+      - name: readme.txt header lint
+        run: php plugin/scripts/check-readme.php
+
+      - name: Attach zip to the GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: launchup-sales-connector.zip
