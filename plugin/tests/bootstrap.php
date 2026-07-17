@@ -121,3 +121,104 @@ if ( ! function_exists( '__' ) ) {
 		return $text;
 	}
 }
+
+/*
+ * -------------------------------------------------------------------------
+ * HTTP + site stubs for PushClient tests. A test sets
+ * $GLOBALS['lusc_http_response'] to a WP-style response array or a
+ * LuscTestError; the last request lands in $GLOBALS['lusc_http_request'].
+ * -------------------------------------------------------------------------
+ */
+
+/**
+ * WP_Error stand-in for transport failures.
+ */
+final class LuscTestError {
+
+	/**
+	 * Constructor.
+	 *
+	 * @param string $message Error message.
+	 */
+	public function __construct( private string $message ) {}
+
+	/**
+	 * WP_Error-compatible accessor.
+	 */
+	public function get_error_message(): string {
+		return $this->message;
+	}
+}
+
+if ( ! function_exists( 'wp_remote_post' ) ) {
+	/**
+	 * Recording HTTP stub.
+	 *
+	 * @param string               $url  Target URL.
+	 * @param array<string, mixed> $args Request args.
+	 * @return mixed
+	 */
+	function wp_remote_post( string $url, array $args = array() ) {
+		$GLOBALS['lusc_http_request'] = array(
+			'url'  => $url,
+			'args' => $args,
+		);
+		return $GLOBALS['lusc_http_response'] ?? array(
+			'response' => array( 'code' => 200 ),
+			'body'     => '{"imported":0}',
+		);
+	}
+}
+
+if ( ! function_exists( 'is_wp_error' ) ) {
+	/**
+	 * Duck-typed is_wp_error stub.
+	 *
+	 * @param mixed $thing Value to test.
+	 */
+	function is_wp_error( $thing ): bool {
+		return is_object( $thing ) && method_exists( $thing, 'get_error_message' );
+	}
+}
+
+if ( ! function_exists( 'wp_remote_retrieve_response_code' ) ) {
+	/**
+	 * Response-code accessor stub.
+	 *
+	 * @param mixed $response WP-style response array.
+	 */
+	function wp_remote_retrieve_response_code( $response ): int {
+		return (int) ( $response['response']['code'] ?? 0 );
+	}
+}
+
+if ( ! function_exists( 'wp_remote_retrieve_body' ) ) {
+	/**
+	 * Response-body accessor stub.
+	 *
+	 * @param mixed $response WP-style response array.
+	 */
+	function wp_remote_retrieve_body( $response ): string {
+		return (string) ( $response['body'] ?? '' );
+	}
+}
+
+if ( ! function_exists( 'site_url' ) ) {
+	/**
+	 * Site URL stub.
+	 */
+	function site_url(): string {
+		return 'https://shop.example.test';
+	}
+}
+
+if ( ! function_exists( 'get_bloginfo' ) ) {
+	/**
+	 * Blog info stub.
+	 *
+	 * @param string $show Requested field.
+	 */
+	function get_bloginfo( string $show = '' ): string {
+		return 'Test Shop';
+	}
+}

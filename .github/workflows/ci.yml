@@ -54,7 +54,9 @@ jobs:
       - name: "Gate 2: OrderSource DTO dump matches wp-env-expected.json"
         run: npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase2-check.php
       - name: "Gate 2: memory sanity on 1k synthetic orders"
-        run: npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase2-memory-check.php
+        run: |
+          npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase2-memory-seed.php
+          npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase2-memory-check.php
       - name: "Gate 0: no PHP errors from the plugin in debug.log"
         run: npx wp-env run cli wp eval "\$log = '/var/www/html/wp-content/debug.log'; if (file_exists(\$log) && strpos(file_get_contents(\$log), 'launchup-sales-connector') !== false) { echo file_get_contents(\$log); exit(1); } echo 'debug.log clean for the plugin';"
       - name: "Gate 0: deactivating WooCommerce shows guard notice, no fatal"
