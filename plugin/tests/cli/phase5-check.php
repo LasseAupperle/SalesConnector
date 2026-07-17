@@ -56,13 +56,13 @@ delete_option( 'lusc_settings' );
 $lusc_redirect = $lusc_save(
 	array(
 		'lusc_ingest_url' => 'https://hub.example.test/functions/v1/sales-ingest',
-		'lusc_api_key'    => 'lu_sk_PHASE5VALIDKEY00001',
+		'lusc_api_key'    => 'lu_sk_PHASE5VALIDKEY00000001',
 	)
 );
 $lusc_assert( null !== $lusc_redirect && false !== strpos( $lusc_redirect, 'lusc_saved=1' ), 'valid save must redirect with lusc_saved=1' );
 $lusc_settings = (array) get_option( 'lusc_settings' );
 $lusc_assert( 'https://hub.example.test/functions/v1/sales-ingest' === ( $lusc_settings['ingest_url'] ?? null ), 'ingest_url not saved' );
-$lusc_assert( 'lu_sk_PHASE5VALIDKEY00001' === ( $lusc_settings['api_key'] ?? null ), 'api_key not saved' );
+$lusc_assert( 'lu_sk_PHASE5VALIDKEY00000001' === ( $lusc_settings['api_key'] ?? null ), 'api_key not saved' );
 $lusc_assert( array() === ( get_transient( 'lusc_save_errors' ) ?: array() ), 'valid save must produce no errors' );
 
 // --- 2 · Invalid save keeps old values + collects both errors --------------
@@ -76,7 +76,7 @@ $lusc_redirect = $lusc_save(
 $lusc_assert( null !== $lusc_redirect && false !== strpos( $lusc_redirect, 'lusc_saved=0' ), 'invalid save must redirect with lusc_saved=0' );
 $lusc_settings = (array) get_option( 'lusc_settings' );
 $lusc_assert( 'https://hub.example.test/functions/v1/sales-ingest' === $lusc_settings['ingest_url'], 'invalid URL must not overwrite the stored one' );
-$lusc_assert( 'lu_sk_PHASE5VALIDKEY00001' === $lusc_settings['api_key'], 'invalid key must not overwrite the stored one' );
+$lusc_assert( 'lu_sk_PHASE5VALIDKEY00000001' === $lusc_settings['api_key'], 'invalid key must not overwrite the stored one' );
 $lusc_errors = get_transient( 'lusc_save_errors' );
 $lusc_assert( is_array( $lusc_errors ) && 2 === count( $lusc_errors ), 'both validation errors must be collected' );
 delete_transient( 'lusc_save_errors' );
@@ -90,7 +90,7 @@ $lusc_save(
 	)
 );
 $lusc_settings = (array) get_option( 'lusc_settings' );
-$lusc_assert( 'lu_sk_PHASE5VALIDKEY00001' === $lusc_settings['api_key'], 'empty key field must keep the stored key' );
+$lusc_assert( 'lu_sk_PHASE5VALIDKEY00000001' === $lusc_settings['api_key'], 'empty key field must keep the stored key' );
 
 // --- 4 · AJAX + admin wiring registered ------------------------------------
 
