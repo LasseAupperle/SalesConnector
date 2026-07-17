@@ -20,12 +20,25 @@ jobs:
           node-version: '20'
       - name: Install Node dependencies
         run: npm install
-      - name: Drop the source mapping (install from the release zip instead)
+      - name: Use a gate-specific wp-env config (no plugin source mapping)
+        # .wp-env.override.json MERGES mappings with the base config, so the
+        # bind mount would survive. Overwrite the whole config instead: the
+        # plugin must come from the release zip, like on a creator shop.
         run: |
-          cat > .wp-env.override.json <<'JSON'
+          cat > .wp-env.json <<'JSON'
           {
+            "core": "WordPress/WordPress#6.9-branch",
+            "phpVersion": "8.1",
+            "plugins": [
+              "https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"
+            ],
             "mappings": {
               "wp-content/lusc-tests": "./plugin/tests"
+            },
+            "config": {
+              "WP_DEBUG": true,
+              "WP_DEBUG_LOG": true,
+              "WP_DEBUG_DISPLAY": false
             }
           }
           JSON
