@@ -203,6 +203,133 @@ if ( ! function_exists( 'wp_remote_retrieve_body' ) ) {
 	}
 }
 
+/*
+ * -------------------------------------------------------------------------
+ * Action Scheduler + WooCommerce stubs for Scheduler tests. Scheduled
+ * actions land in $GLOBALS['lusc_test_actions']; wc_get_orders returns
+ * $GLOBALS['lusc_test_orders'] (only for the oldest-order lookup — window
+ * queries return an empty list in the unit environment).
+ * -------------------------------------------------------------------------
+ */
+
+$GLOBALS['lusc_test_actions'] = array();
+$GLOBALS['lusc_test_orders']  = array();
+
+/**
+ * Reset scheduled-action + order stubs between tests.
+ */
+function lusc_test_reset_actions(): void {
+	$GLOBALS['lusc_test_actions'] = array();
+	$GLOBALS['lusc_test_orders']  = array();
+}
+
+if ( ! function_exists( 'wp_timezone' ) ) {
+	/**
+	 * Shop timezone stub (specs/00 §4.7 operating assumption).
+	 */
+	function wp_timezone(): DateTimeZone {
+		return new DateTimeZone( 'Europe/Amsterdam' );
+	}
+}
+
+if ( ! function_exists( 'as_next_scheduled_action' ) ) {
+	/**
+	 * Next-scheduled lookup stub.
+	 *
+	 * @param string     $hook  Hook name.
+	 * @param mixed      $args  Args filter (ignored).
+	 * @param string     $group Group.
+	 * @return int|false
+	 */
+	function as_next_scheduled_action( string $hook, $args = null, string $group = '' ) {
+		foreach ( $GLOBALS['lusc_test_actions'] as $action ) {
+			if ( $action['hook'] === $hook ) {
+				return $action['timestamp'] ?? true;
+			}
+		}
+		return false;
+	}
+}
+
+if ( ! function_exists( 'as_schedule_recurring_action' ) ) {
+	/**
+	 * Recurring-action stub.
+	 *
+	 * @param int                  $timestamp First run.
+	 * @param int                  $interval  Interval seconds.
+	 * @param string               $hook      Hook name.
+	 * @param array<string, mixed> $args      Args.
+	 * @param string               $group     Group.
+	 */
+	function as_schedule_recurring_action( int $timestamp, int $interval, string $hook, array $args = array(), string $group = '' ): int {
+		$GLOBALS['lusc_test_actions'][] = compact( 'timestamp', 'interval', 'hook', 'args', 'group' ) + array( 'type' => 'recurring' );
+		return count( $GLOBALS['lusc_test_actions'] );
+	}
+}
+
+if ( ! function_exists( 'as_schedule_single_action' ) ) {
+	/**
+	 * Single-action stub.
+	 *
+	 * @param int                  $timestamp Run time.
+	 * @param string               $hook      Hook name.
+	 * @param array<string, mixed> $args      Args.
+	 * @param string               $group     Group.
+	 */
+	function as_schedule_single_action( int $timestamp, string $hook, array $args = array(), string $group = '' ): int {
+		$GLOBALS['lusc_test_actions'][] = compact( 'timestamp', 'hook', 'args', 'group' ) + array( 'type' => 'single' );
+		return count( $GLOBALS['lusc_test_actions'] );
+	}
+}
+
+if ( ! function_exists( 'as_enqueue_async_action' ) ) {
+	/**
+	 * Async-action stub.
+	 *
+	 * @param string               $hook  Hook name.
+	 * @param array<string, mixed> $args  Args.
+	 * @param string               $group Group.
+	 */
+	function as_enqueue_async_action( string $hook, array $args = array(), string $group = '' ): int {
+		$GLOBALS['lusc_test_actions'][] = compact( 'hook', 'args', 'group' ) + array( 'type' => 'async' );
+		return count( $GLOBALS['lusc_test_actions'] );
+	}
+}
+
+if ( ! function_exists( 'as_unschedule_all_actions' ) ) {
+	/**
+	 * Unschedule-all stub.
+	 *
+	 * @param string               $hook  Hook name ('' = all).
+	 * @param array<string, mixed> $args  Args.
+	 * @param string               $group Group.
+	 */
+	function as_unschedule_all_actions( string $hook = '', array $args = array(), string $group = '' ): void {
+		$GLOBALS['lusc_test_actions'] = array_values(
+			array_filter(
+				$GLOBALS['lusc_test_actions'],
+				static fn ( array $action ): bool => $action['group'] !== $group
+			)
+		);
+	}
+}
+
+if ( ! function_exists( 'wc_get_orders' ) ) {
+	/**
+	 * Order query stub: the oldest-order lookup (limit 1) gets the fake
+	 * order list; window queries return nothing in the unit environment.
+	 *
+	 * @param array<string, mixed> $args Query args.
+	 * @return array<int, object>
+	 */
+	function wc_get_orders( array $args = array() ) {
+		if ( 1 === ( $args['limit'] ?? 0 ) ) {
+			return $GLOBALS['lusc_test_orders'];
+		}
+		return array();
+	}
+}
+
 if ( ! function_exists( 'site_url' ) ) {
 	/**
 	 * Site URL stub.
