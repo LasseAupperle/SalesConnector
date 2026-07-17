@@ -3,7 +3,7 @@
  * Plugin Name:       Launch Up Sales Connector
  * Plugin URI:        https://github.com/LasseAupperle/SalesConnector
  * Description:       Aggregates WooCommerce sales per month and pushes them to Launch Hub. No customer data ever leaves the shop.
- * Version:           0.4.0
+ * Version:           0.5.0
  * Author:            Launch Up
  * Author URI:        https://launch-up.nl
  * License:           GPL-2.0-or-later
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'LUSC_VERSION', '0.4.0' );
+define( 'LUSC_VERSION', '0.5.0' );
 define( 'LUSC_PLUGIN_FILE', __FILE__ );
 
 /*
@@ -79,6 +79,26 @@ function lusc_boot(): void {
 		return;
 	}
 
-	// Components register themselves here in later phases (scheduler, settings page, updater).
+	( new \LaunchUp\SalesConnector\Scheduler() )->register();
+
+	// Components register themselves here in later phases (settings page, updater).
 }
 add_action( 'plugins_loaded', 'lusc_boot' );
+
+/*
+ * Activation: schedule the daily push (the self-healing admin_init check
+ * covers the case where WooCommerce is activated later). Deactivation:
+ * remove all lusc actions (specs/02 §5).
+ */
+register_activation_hook(
+	__FILE__,
+	static function (): void {
+		( new \LaunchUp\SalesConnector\Scheduler() )->ensureScheduled();
+	}
+);
+register_deactivation_hook(
+	__FILE__,
+	static function (): void {
+		\LaunchUp\SalesConnector\Scheduler::unscheduleAll();
+	}
+);
