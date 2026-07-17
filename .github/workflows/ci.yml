@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-test:
+    name: PHPCS + PHPUnit (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '8.1', '8.3' ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --working-dir=plugin
+      - name: PHPCS (WordPress Coding Standards)
+        run: composer lint --working-dir=plugin
+      - name: PHPUnit (unit suite)
+        run: composer test --working-dir=plugin
+
+  wp-env:
+    name: wp-env integration (WP 6.9, WooCommerce, PHP 8.1)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Node dependencies
+        run: npm install
+      - name: Start wp-env
+        run: npm run env:start
+      - name: Activate plugin
+        run: npx wp-env run cli wp plugin activate launchup-sales-connector
+      - name: Enable HPOS (custom order tables)
+        run: npx wp-env run cli wp option update woocommerce_custom_orders_table_enabled yes
+      - name: "Gate 0: plugin active + HPOS compatible (with WooCommerce)"
+        run: npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase0-check.php
+      - name: "Gate 0: no PHP errors from the plugin in debug.log"
+        run: npx wp-env run cli wp eval "\$log = '/var/www/html/wp-content/debug.log'; if (file_exists(\$log) && strpos(file_get_contents(\$log), 'launchup-sales-connector') !== false) { echo file_get_contents(\$log); exit(1); } echo 'debug.log clean for the plugin';"
+      - name: "Gate 0: deactivating WooCommerce shows guard notice, no fatal"
+        run: |
+          npx wp-env run cli wp plugin deactivate woocommerce
+          npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/guard-check.php
+          npx wp-env run cli wp plugin activate woocommerce
+      - name: Stop wp-env
+        if: always()
+        run: npm run env:stop

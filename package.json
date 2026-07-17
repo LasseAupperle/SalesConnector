@@ -1,0 +1,13 @@
+{
+	"name": "launchup-sales-connector-dev",
+	"private": true,
+	"description": "Dev environment (wp-env) for the Launch Up Sales Connector plugin.",
+	"scripts": {
+		"env:start": "wp-env start",
+		"env:stop": "wp-env stop",
+		"env:destroy": "wp-env destroy"
+	},
+	"devDependencies": {
+		"@wordpress/env": "^10.0.0"
+	}
+}

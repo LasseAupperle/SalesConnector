@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<ruleset name="Launch Up Sales Connector">
+	<description>WordPress Coding Standards for the Launch Up Sales Connector plugin.</description>
+
+	<file>includes</file>
+	<file>launchup-sales-connector.php</file>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="ps"/>
+
+	<config name="minimum_supported_wp_version" value="6.9"/>
+	<config name="testVersion" value="8.1-"/>
+
+	<rule ref="WordPress">
+		<!-- PSR-4 class files (ClassName.php) instead of WP's class-name.php. -->
+		<exclude name="WordPress.Files.FileName"/>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="lusc"/>
+				<element value="LaunchUp\SalesConnector"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="launchup-sales-connector"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>
