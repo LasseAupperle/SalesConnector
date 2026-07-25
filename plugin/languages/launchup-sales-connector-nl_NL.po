@@ -204,3 +204,7 @@ msgstr "Nog geen pushes."
 #: includes/SettingsPage.php:498
 msgid "Connection works! Click \"Push history\" once to send all existing months to Launch Hub."
 msgstr "Verbinding werkt! Klik één keer op \"Historie pushen\" om alle bestaande maanden naar Launch Hub te sturen."
+
+#: includes/PushClient.php
+msgid "Unexpected answer from this address — is the ingest URL correct?"
+msgstr "Onverwacht antwoord van dit adres — klopt de ingest-URL?"

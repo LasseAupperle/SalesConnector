@@ -121,6 +121,19 @@ foreach ( $lusc_lu_cases as $lusc_code => $lusc_fragment ) {
 }
 $lusc_assert( 3 === $lusc_store->read()['consecutive_failures'], 'consecutive_failures should be 3' );
 
+// --- 3b · a 200 that is not OUR endpoint ----------------------------------
+//
+// The first live install green-lit a truncated ingest URL: something answered 200, the plugin
+// logged OK with a fresh success timestamp, and Launch Hub had never heard of the shop. A 200
+// without an `imported` count is not agreement.
+$lusc_reply( 200, array( 'status' => 'ok' ) );
+$lusc_result = $lusc_client->push( array( 'contract' => '1.1' ) );
+$lusc_assert( ! $lusc_result->ok, 'a 200 without imported must NOT count as success' );
+$lusc_assert( 200 === $lusc_result->httpCode, 'the status code is still reported' );
+$lusc_assert( false !== strpos( $lusc_result->message, 'ingest URL' ), 'the message must point at the URL: ' . $lusc_result->message );
+$lusc_store->recordAttempt( 'manual', 'w', 1, $lusc_result );
+$lusc_assert( 'failed' === $lusc_store->read()['last_result'], 'a bogus 200 must leave the status red' );
+
 // --- 4 · transport failure -------------------------------------------------
 
 $GLOBALS['lusc_mock_reply'] = new WP_Error( 'http_request_failed', 'cURL error 7: connection refused (key ' . $lusc_key . ')' );

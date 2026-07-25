@@ -97,6 +97,50 @@ final class PushClientTest extends TestCase {
 		$this->assertSame( $expected, $result->message );
 	}
 
+	/**
+	 * @return iterable<string, array{string}>
+	 */
+	public static function notOurEndpointProvider(): iterable {
+		yield 'a shop homepage' => [ '<!DOCTYPE html><html><body>Welkom</body></html>' ];
+		yield 'a proxy saying nothing useful' => [ '{"status":"ok"}' ];
+		yield 'an empty 200' => [ '' ];
+		yield 'a login wall' => [ '{"message":"unauthorized"}' ];
+	}
+
+	/**
+	 * A 200 is not agreement. This is the bug that green-lit the first live install: a truncated
+	 * ingest URL answered 200, the connector logged "OK" with a fresh success timestamp, and
+	 * Launch Hub had never heard of the shop. Silence would have been better than a green light.
+	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'notOurEndpointProvider' )]
+	public function test_a_200_without_imported_is_not_success( string $body ): void {
+		$GLOBALS['lusc_http_response'] = [
+			'response' => [ 'code' => 200 ],
+			'body'     => $body,
+		];
+
+		$result = ( new PushClient() )->push( [ 'contract' => '1.1' ] );
+
+		$this->assertFalse( $result->ok );
+		$this->assertSame( 200, $result->httpCode );
+		$this->assertNull( $result->imported );
+		$this->assertStringContainsString( 'ingest URL', $result->message );
+	}
+
+	public function test_a_zero_import_is_still_success(): void {
+		// The honest empty case: a window with no counted orders. `imported` is present, so the
+		// endpoint did answer us — that must not be dragged down by the guard above.
+		$GLOBALS['lusc_http_response'] = [
+			'response' => [ 'code' => 200 ],
+			'body'     => '{"imported":0}',
+		];
+
+		$result = ( new PushClient() )->push( [ 'contract' => '1.1' ] );
+
+		$this->assertTrue( $result->ok );
+		$this->assertSame( 0, $result->imported );
+	}
+
 	public function test_unknown_error_keeps_endpoint_message(): void {
 		$GLOBALS['lusc_http_response'] = [
 			'response' => [ 'code' => 500 ],

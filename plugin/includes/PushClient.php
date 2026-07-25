@@ -91,10 +91,31 @@ final class PushClient {
 		$body = is_array( $body ) ? $body : array();
 
 		if ( 200 === $code ) {
+			/*
+			 * A 200 is NOT success on its own. Launch Hub always answers an accepted push with
+			 * an `imported` count; anything else returning 200 — a shop's own homepage, a
+			 * captive portal, a proxy, a mistyped URL that happens to resolve — is not our
+			 * endpoint agreeing, and treating it as agreement is how a connector goes green
+			 * while a creator's revenue quietly goes nowhere. That happened in the first live
+			 * install: a truncated URL earned a "laatste succes" timestamp and an OK in the log
+			 * while Launch Hub had never heard of the shop.
+			 */
+			if ( ! array_key_exists( 'imported', $body ) ) {
+				return new PushResult(
+					false,
+					200,
+					null,
+					false,
+					null,
+					__( 'Unexpected answer from this address — is the ingest URL correct?', 'launchup-sales-connector' ),
+					array()
+				);
+			}
+
 			return new PushResult(
 				true,
 				200,
-				(int) ( $body['imported'] ?? 0 ),
+				(int) $body['imported'],
 				(bool) ( $body['test'] ?? false ),
 				null,
 				__( 'OK', 'launchup-sales-connector' ),

@@ -45,4 +45,16 @@ Shipping a new version to every creator shop:
 
 ## Status
 
-Phases 0-6 built. Phase 7 (E2E + UAT against Launch Hub staging) pending.
+**v1.0.0 — in production.** All phases 0-7 done. Verified on a live creator shop (2026-07-25): the
+plugin pushed real WooCommerce months to Launch Hub, and the revenue, order count, item count and
+per-product breakdown matched the shop's own figures.
+
+Two things that first install taught us, both fixed in 1.0.0:
+
+- **A HTTP 200 is not agreement.** A truncated ingest URL answered 200, and the connector showed a
+  green "laatste succes" while Launch Hub had never heard of the shop. A 200 without an `imported`
+  count is now a failure that names the likely cause.
+- **A trailing slash is not a different shop.** `site_url()` omits it, operators habitually type
+  it, and the mismatch surfaced as `LU-SAL-003` ("this key belongs to a different shop URL") —
+  true, and pointing at the wrong thing. Launch Hub now ignores a trailing slash on either side;
+  everything else still has to match exactly.
