@@ -14,6 +14,7 @@ WordPress plugin (`launchup-sales-connector`) installed on **every creator WooCo
 | specs/03-settings-admin-ui.md | Settings page, test/push/backfill buttons, notices, i18n, uninstall |
 | specs/04-updates-distribution.md | Public GitHub repo, releases, plugin-update-checker, per-shop install guide |
 | specs/05-build-phases-gates.md | Phases 0-7 with runnable pass/fail gates |
+| specs/06-catalogue-and-product-ids.md | Product ids on order lines + catalogue sync, contract v1.2, phases 8-10 (specified 2026-08-31, **not built**) |
 
 ## Baseline (pinned)
 

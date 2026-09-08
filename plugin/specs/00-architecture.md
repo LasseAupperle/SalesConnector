@@ -22,6 +22,8 @@ Separation rule: `PeriodAggregator` and its DTOs import **nothing** from WordPre
 
 ## 2. Ingest contract v1.1 (single source of truth: launch-hub repo specs/14 §3 — keep this copy in sync manually)
 
+> **Amended by `specs/06`:** contract **v1.2** adds `external_ref` to every `products[]` entry and an optional top-level `catalogue[]`. Additive only — a 1.1 payload stays valid and a Launch Hub that predates the change ignores the new fields. The Launch Hub side is `specs/16` in the launch-hub repo and must be deployed first.
+
 `POST {ingest_url}` with JSON:
 
 ```json
