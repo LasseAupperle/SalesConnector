@@ -59,12 +59,19 @@ final class StatusStore {
 	/**
 	 * Record one push attempt (specs/02 §4).
 	 *
-	 * @param string     $kind    'daily' | 'manual' | 'backfill' | 'test'.
-	 * @param string     $window  Human-readable window, e.g. '2026-04…2026-06'.
-	 * @param int        $periods Number of periods in the payload.
-	 * @param PushResult $result  The push outcome.
+	 * @param string             $kind    'daily' | 'manual' | 'backfill' | 'test'.
+	 * @param string             $window  Human-readable window, e.g. '2026-04…2026-06'.
+	 * @param int                $periods Number of periods in the payload.
+	 * @param PushResult         $result The push outcome.
+	 * @param array<int, string> $notes  Notes raised locally, before the request (specs/06 §2).
 	 */
-	public function recordAttempt( string $kind, string $window, int $periods, PushResult $result ): void {
+	public function recordAttempt(
+		string $kind,
+		string $window,
+		int $periods,
+		PushResult $result,
+		array $notes = array()
+	): void {
 		$status = $this->read();
 		$now    = gmdate( 'c', (int) call_user_func( $this->clock ) );
 
@@ -90,6 +97,13 @@ final class StatusStore {
 		if ( array() !== $result->warnings ) {
 			// Warnings mean a bug (specs/00 §2) — surface them prominently in the log.
 			$entry['message'] .= ' | WARNINGS: ' . implode( '; ', array_map( array( $this, 'maskSecrets' ), $result->warnings ) );
+		}
+		if ( array() !== $notes ) {
+			// Labelled apart from WARNINGS on purpose: a warning is Launch Hub objecting to what
+			// we sent, a note is this plugin saying what it could not send. Reading "truncated at
+			// 500 products" as a complaint from the hub would send somebody looking in the wrong
+			// system entirely.
+			$entry['message'] .= ' | NOTES: ' . implode( '; ', array_map( array( $this, 'maskSecrets' ), $notes ) );
 		}
 
 		array_unshift( $status['log'], $entry );

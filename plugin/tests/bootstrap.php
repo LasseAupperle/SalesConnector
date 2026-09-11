@@ -330,6 +330,26 @@ if ( ! function_exists( 'wc_get_orders' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wc_get_products' ) ) {
+	/**
+	 * Product query stub, mirroring wc_get_orders above.
+	 *
+	 * Returns whatever a test put in $GLOBALS['lusc_test_products'] for the FIRST page and
+	 * nothing thereafter, so CatalogueSource's paging loop terminates instead of spinning.
+	 * Empty by default: the Scheduler tests are about the retry ladder and the windows, and
+	 * they should not grow a catalogue just because the push now carries one.
+	 *
+	 * @param array<string, mixed> $args Query args.
+	 * @return array<int, object>
+	 */
+	function wc_get_products( array $args = array() ) {
+		if ( 1 !== ( $args['page'] ?? 1 ) ) {
+			return array();
+		}
+		return $GLOBALS['lusc_test_products'] ?? array();
+	}
+}
+
 if ( ! function_exists( 'site_url' ) ) {
 	/**
 	 * Site URL stub.

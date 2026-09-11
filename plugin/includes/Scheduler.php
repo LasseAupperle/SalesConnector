@@ -218,10 +218,35 @@ final class Scheduler {
 
 		$end        = $endExclusive->modify( '-1 second' );
 		$aggregates = ( new PeriodAggregator() )->aggregate( $source->ordersForWindow( $start, $end ) );
-		$payload    = PayloadBuilder::build( site_url(), get_bloginfo( 'name' ), PushClient::resolveApiKey(), $aggregates );
+
+		/*
+		 * The catalogue rides along on EVERY push, including each backfill chunk (specs/06 §2).
+		 *
+		 * Repetitive, and deliberately so. Sending it only on the nightly push would mean a shop
+		 * that was just connected — where somebody clicks "Push history" and then waits to price
+		 * things — gets no products in Launch Hub until the next night, which defeats the reason
+		 * the catalogue exists. Launch Hub upserts, so a repeat costs nothing but a few kilobytes,
+		 * and the product list is never more than one push stale.
+		 */
+		$catalogue = new CatalogueSource();
+		$products  = $catalogue->products();
+
+		$payload = PayloadBuilder::build(
+			site_url(),
+			get_bloginfo( 'name' ),
+			PushClient::resolveApiKey(),
+			$aggregates,
+			$products
+		);
 
 		$result = ( new PushClient() )->push( $payload );
-		$store->recordAttempt( $kind, $start->format( 'Y-m' ) . '…' . $end->format( 'Y-m' ), count( $aggregates ), $result );
+		$store->recordAttempt(
+			$kind,
+			$start->format( 'Y-m' ) . '…' . $end->format( 'Y-m' ),
+			count( $aggregates ),
+			$result,
+			$catalogue->notes()
+		);
 
 		return $result->ok;
 	}

@@ -66,6 +66,8 @@ jobs:
         run: |
           npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase2-memory-seed.php
           npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase2-memory-check.php
+      - name: "Gate 9: catalogue sends published products only, variations rolled up"
+        run: npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase9-check.php
       - name: "Gate 3: PushClient + StatusStore against mock ingest"
         run: npx wp-env run cli wp eval-file wp-content/plugins/launchup-sales-connector/tests/cli/phase3-check.php
       - name: "Gate 4: scheduler, retry ladder, backfill (real Action Scheduler)"
