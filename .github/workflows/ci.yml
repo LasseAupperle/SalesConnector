@@ -39,6 +39,15 @@ jobs:
           node-version: '20'
       - name: Install Node dependencies
         run: npm install
+      # WooCommerce is PINNED in .wp-env.json, not latest-stable.
+      #
+      # Core was pinned to the 6.9 branch and WooCommerce was not. When WooCommerce 11 raised its
+      # floor to WordPress 7.0 it simply stopped activating, and this job went red on every
+      # commit — including ones that changed no PHP. 10.9.4 is the last 10.x, which is the
+      # baseline plugin/CLAUDE.md declares (WP 6.9+, WooCommerce 10.x).
+      #
+      # Pin BOTH sides or neither. Pinning one is what broke. The note lives here because
+      # wp-env validates .wp-env.json strictly and rejects any key it does not know.
       - name: Start wp-env
         run: npm run env:start
       - name: Activate plugin
