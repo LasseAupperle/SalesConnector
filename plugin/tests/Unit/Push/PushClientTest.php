@@ -66,7 +66,7 @@ final class PushClientTest extends TestCase {
 		$this->assertSame( 0, $result->imported );
 
 		$body = json_decode( $GLOBALS['lusc_http_request']['args']['body'], true );
-		$this->assertSame( '1.1', $body['contract'] );
+		$this->assertSame( '1.2', $body['contract'] );
 		$this->assertSame( 'https://shop.example.test', $body['shop_identifier'] );
 		$this->assertSame( 'Test Shop', $body['shop_name'] );
 		$this->assertSame( 'lu_sk_ABCDEFGHIJKLMNOPQRST', $body['api_key'] );

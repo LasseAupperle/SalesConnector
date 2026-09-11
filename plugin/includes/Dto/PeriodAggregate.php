@@ -80,9 +80,13 @@ final class PeriodAggregate {
 		$products = array();
 		foreach ( $this->products as $product ) {
 			$products[] = array(
-				'name'     => $product->name,
-				'quantity' => $product->quantity,
-				'revenue'  => round( $product->revenue, 2 ),
+				'name'         => $product->name,
+				'quantity'     => $product->quantity,
+				'revenue'      => round( $product->revenue, 2 ),
+				// v1.2 (specs/06 §1). Namespaced so a second shop platform can never collide
+				// with WooCommerce ids. Already computed by OrderSource::resolveParent() — this
+				// used to throw it away here.
+				'external_ref' => 'wc:' . $product->parentProductId,
 			);
 		}
 

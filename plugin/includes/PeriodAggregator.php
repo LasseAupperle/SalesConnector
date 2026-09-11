@@ -58,25 +58,37 @@ final class PeriodAggregator {
 			++$bucket['orders'];
 
 			foreach ( $order->items as $item ) {
-				$key = $item->parentProductId . '|' . $item->productName;
+				/*
+				 * Keyed on the parent id ALONE, not id|name.
+				 *
+				 * It used to include the name, which split a product renamed mid-month into two
+				 * cells. That was harmless while a product WAS its name — but both cells now
+				 * carry the same external_ref, and Launch Hub joins per-product prices on that:
+				 * two entries with one id means the royalty is counted twice, in money, silently.
+				 * One product, one cell. The name below is whichever the shop reported last.
+				 */
+				$key = (string) $item->parentProductId;
 				if ( ! isset( $bucket['products'][ $key ] ) ) {
 					$bucket['products'][ $key ] = array(
-						'name'     => $item->productName,
-						'quantity' => 0,
-						'revenue'  => 0.0,
+						'parent_id' => $item->parentProductId,
+						'name'      => $item->productName,
+						'quantity'  => 0,
+						'revenue'   => 0.0,
 					);
 				}
+				$bucket['products'][ $key ]['name']      = $item->productName;
 				$bucket['products'][ $key ]['quantity'] += $item->quantity;
 				$bucket['products'][ $key ]['revenue']  += $item->lineTotalExTax;
 			}
 
 			foreach ( $order->refundLines as $refund ) {
-				$key = $refund->parentProductId . '|' . $refund->productName;
+				$key = (string) $refund->parentProductId;
 				if ( ! isset( $bucket['products'][ $key ] ) ) {
 					$bucket['products'][ $key ] = array(
-						'name'     => $refund->productName,
-						'quantity' => 0,
-						'revenue'  => 0.0,
+						'parent_id' => $refund->parentProductId,
+						'name'      => $refund->productName,
+						'quantity'  => 0,
+						'revenue'   => 0.0,
 					);
 				}
 				$bucket['products'][ $key ]['quantity'] -= $refund->quantity;
@@ -124,11 +136,12 @@ final class PeriodAggregator {
 			if ( 0 === $cell['quantity'] && abs( $cell['revenue'] ) < 0.005 ) {
 				continue;
 			}
-			$product           = new ProductAggregate();
-			$product->name     = $cell['name'];
-			$product->quantity = $cell['quantity'];
-			$product->revenue  = $cell['revenue'];
-			$products[]        = $product;
+			$product                  = new ProductAggregate();
+			$product->parentProductId = (int) $cell['parent_id'];
+			$product->name            = $cell['name'];
+			$product->quantity        = $cell['quantity'];
+			$product->revenue         = $cell['revenue'];
+			$products[]               = $product;
 		}
 
 		// Stable sort: revenue desc, then name asc (rule 7).

@@ -1,5 +1,5 @@
 {
-    "contract": "1.1",
+    "contract": "1.2",
     "shop_identifier": "https://shopnaam.nl",
     "shop_name": "esoo Merch",
     "api_key": "lu_sk_TESTKEY1234567890AB",
@@ -15,12 +15,14 @@
                 {
                     "name": "esoo Shirt zwart",
                     "quantity": 4,
-                    "revenue": 80
+                    "revenue": 80,
+                    "external_ref": "wc:100"
                 },
                 {
                     "name": "esoo Hoodie",
                     "quantity": 1,
-                    "revenue": 35
+                    "revenue": 35,
+                    "external_ref": "wc:200"
                 }
             ]
         },
@@ -35,12 +37,14 @@
                 {
                     "name": "esoo Shirt zwart",
                     "quantity": 2,
-                    "revenue": 40
+                    "revenue": 40,
+                    "external_ref": "wc:100"
                 },
                 {
                     "name": "esoo Mok",
                     "quantity": 2,
-                    "revenue": 24
+                    "revenue": 24,
+                    "external_ref": "wc:300"
                 }
             ]
         }

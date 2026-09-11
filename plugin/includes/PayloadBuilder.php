@@ -36,7 +36,7 @@ final class PayloadBuilder {
 		}
 
 		return array(
-			'contract'        => '1.1',
+			'contract'        => '1.2',
 			'shop_identifier' => $shopIdentifier,
 			'shop_name'       => $shopName,
 			'api_key'         => $apiKey,
