@@ -84,7 +84,7 @@ $lusc_assert( $lusc_result->ok && $lusc_result->test && 0 === $lusc_result->impo
 $lusc_sent = end( $GLOBALS['lusc_mock_requests'] );
 $lusc_assert( 'https://hub.mock.test/functions/v1/sales-ingest' === $lusc_sent['url'], 'test() hit wrong URL: ' . $lusc_sent['url'] );
 $lusc_assert( array() === $lusc_sent['body']['periods'], 'test() must send periods: []' );
-$lusc_assert( '1.1' === $lusc_sent['body']['contract'], 'contract must be 1.1' );
+$lusc_assert( '1.2' === $lusc_sent['body']['contract'], 'contract must be 1.2' );
 $lusc_assert( site_url() === $lusc_sent['body']['shop_identifier'], 'shop_identifier must be site_url()' );
 $lusc_assert( get_bloginfo( 'name' ) === $lusc_sent['body']['shop_name'], 'shop_name must be blog name' );
 $lusc_assert( $lusc_key === $lusc_sent['body']['api_key'], 'api_key missing from payload' );
