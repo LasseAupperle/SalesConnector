@@ -5,8 +5,8 @@ Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 8.1
 WC requires at least: 10.0
-WC tested up to: 10.0
-Stable tag: 1.0.0
+WC tested up to: 10.9
+Stable tag: 1.1.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,6 +17,12 @@ Aggregates WooCommerce sales per month and pushes them to Launch Hub. No custome
 Internal Launch Up plugin installed on every creator WooCommerce shop. It aggregates sales per month (per parent product, ex VAT, net of refunds) and pushes them to Launch Hub's sales-ingest endpoint. It deliberately knows nothing about profit prices, contracts, or creators, and no customer data ever leaves the shop — only per-product quantities, revenue totals, and the shop name.
 
 == Changelog ==
+
+= 1.1.0 =
+* Contract v1.2: every order line now carries the shop's own product id (`external_ref`, e.g. `wc:412`), so Launch Hub can hold a royalty against a product instead of against its name. A product renamed mid-month stays one product; two products sharing a name stay two.
+* The push also sends the shop's **catalogue** — every published parent product — so a product can be priced in Launch Hub before its first sale, which is the order Launch Up actually works in: contract signed, shop built, then royalties filled in.
+* Drafts, private and pending products are never sent: an unannounced design is not something to leak into a system other staff read.
+* Tested against WooCommerce 10.9.
 
 = 1.0.0 =
 * First production release. Verified end to end against Launch Hub on a live creator shop.
