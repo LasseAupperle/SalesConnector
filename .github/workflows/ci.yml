@@ -47,6 +47,10 @@ jobs:
       # the fix now is to move the baseline forward instead (DECISIONS 2026-09-11), so the pair
       # under test is the pair a creator shop actually installs: WP 7.1 + WooCommerce 11.1.0.
       #
+      # Core is pinned to the RELEASE TAG (#7.1), not to #7.1-branch. The branch is where the next
+      # patch is being written: it reported 7.1.1-RC1-63589, so the gate was testing against code
+      # no shop is running and could go red on a core change that has nothing to do with us.
+      #
       # Bumping either pin is a deliberate act with a gate run behind it, not a default. The note
       # lives here because wp-env validates .wp-env.json strictly and rejects any key it does not
       # know.
