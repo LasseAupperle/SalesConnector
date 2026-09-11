@@ -1,9 +1,10 @@
 {
 	"$schema": "https://raw.githubusercontent.com/WordPress/gutenberg/trunk/schemas/json/wp-env.json",
+	"_comment": "WooCommerce is PINNED, not latest-stable. Core was pinned to 6.9 and WooCommerce was not, so when WooCommerce 11 raised its floor to WordPress 7.0 it simply stopped activating here and CI went red on commits that changed no PHP. 10.9.4 is the last 10.x, which is the baseline plugin/CLAUDE.md declares (WP 6.9+, WooCommerce 10.x). Pin BOTH or neither; pinning one side only is what broke.",
 	"core": "WordPress/WordPress#6.9-branch",
 	"phpVersion": "8.1",
 	"plugins": [
-		"https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"
+		"https://downloads.wordpress.org/plugin/woocommerce.10.9.4.zip"
 	],
 	"mappings": {
 		"wp-content/plugins/launchup-sales-connector": "./plugin"
