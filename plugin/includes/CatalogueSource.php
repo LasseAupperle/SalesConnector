@@ -54,8 +54,11 @@ final class CatalogueSource {
 	public function products(): array {
 		$entries = array();
 		$page    = 1;
+		// Tracked rather than recounted: count() in the loop condition walks the array on every
+		// iteration, and WordPress Coding Standards refuses it outright.
+		$taken = 0;
 
-		while ( count( $entries ) < self::MAX_PRODUCTS ) {
+		while ( $taken < self::MAX_PRODUCTS ) {
 			$batch = wc_get_products(
 				array(
 					// Published only. Drafts, pending and private products are unannounced
@@ -78,7 +81,7 @@ final class CatalogueSource {
 			}
 
 			foreach ( $batch as $product ) {
-				if ( count( $entries ) >= self::MAX_PRODUCTS ) {
+				if ( $taken >= self::MAX_PRODUCTS ) {
 					break;
 				}
 
@@ -91,6 +94,7 @@ final class CatalogueSource {
 					// the shop has no price set: zero is a number somebody believes.
 					'price'        => $this->priceOf( $product ),
 				);
+				++$taken;
 			}
 
 			if ( count( $batch ) < self::PAGE_SIZE ) {
@@ -100,7 +104,7 @@ final class CatalogueSource {
 			++$page;
 		}
 
-		if ( count( $entries ) >= self::MAX_PRODUCTS ) {
+		if ( $taken >= self::MAX_PRODUCTS ) {
 			$this->notes[] = sprintf(
 				'catalogue truncated at %d products; the rest were not sent',
 				self::MAX_PRODUCTS
