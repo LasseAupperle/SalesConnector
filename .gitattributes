@@ -1,0 +1,18 @@
+# Line endings are LF in the repository AND in the working tree.
+#
+# This matters more here than in most repos: tests/fixtures/expected-payload.json is compared
+# BYTE FOR BYTE against freshly built JSON (PayloadSnapshotTest). With core.autocrlf=true a
+# Windows checkout hands that file back as CRLF, and the comparison fails on a file nobody
+# touched. The test currently survives only because it strips \r from the expected side by hand —
+# a workaround for a problem that should not exist, and one that protects exactly one fixture.
+#
+# This changes no blob: everything is already stored LF. It only stops checkout rewriting it.
+* text=auto eol=lf
+
+# Binary: never touch these.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.zip binary
+*.mo binary
