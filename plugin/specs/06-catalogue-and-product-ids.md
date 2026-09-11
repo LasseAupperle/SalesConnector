@@ -1,6 +1,6 @@
 # 06 · Product ids & catalogue sync (contract v1.2)
 
-**Status:** specified 2026-08-31, not built. Launch Hub counterpart: `specs/16-per-product-royalties.md`
+**Status:** specified 2026-08-31; built and released 2026-09-11 as plugin v1.1.0. P8-P10 all gated, P10 run cross-repo against a real Launch Hub. Live on the Esoo shop the same day. Launch Hub counterpart: `specs/16-per-product-royalties.md`
 in the launch-hub repo. **Launch Hub phase C2 must be deployed before this plugin release ships** —
 the app has to understand the new fields before a shop starts sending them.
 
