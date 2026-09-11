@@ -141,9 +141,17 @@ msgstr "Push nu"
 msgid "Push history"
 msgstr "Historie pushen"
 
-#: includes/SettingsPage.php:432
-msgid "Push history sends all months since the first order and doubles as a full re-sync (e.g. after a late refund on an old order)."
-msgstr "Historie pushen verstuurt alle maanden sinds de eerste bestelling en dient tegelijk als volledige hersynchronisatie (bijvoorbeeld na een late terugbetaling op een oude bestelling)."
+#: includes/SettingsPage.php
+msgid "Push now sends this month and the two before it — the same thing the nightly job at 04:00 does."
+msgstr "Nu pushen verstuurt deze maand en de twee maanden ervoor — precies wat de nachtelijke taak om 04:00 doet."
+
+#: includes/SettingsPage.php
+msgid "Push history sends all months since the first order and doubles as a full re-sync (e.g. after a late refund on an old order). Use it once when connecting the shop."
+msgstr "Historie pushen verstuurt alle maanden sinds de eerste bestelling en dient tegelijk als volledige hersynchronisatie (bijvoorbeeld na een late terugbetaling op een oude bestelling). Gebruik dit één keer bij het koppelen van de shop."
+
+#: includes/SettingsPage.php
+msgid "Either way the shop also sends its published products, so they can be given a royalty in Launch Hub before they have sold anything."
+msgstr "In beide gevallen stuurt de shop ook zijn gepubliceerde producten mee, zodat ze in Launch Hub een royalty kunnen krijgen voordat er iets van verkocht is."
 
 #: includes/SettingsPage.php:437
 msgid "Status"

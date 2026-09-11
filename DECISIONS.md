@@ -46,3 +46,23 @@ Trigger types:
   `.wp-env.json`, `.github/workflows/ci.yml`, `.github/workflows/gate6.yml`, `README.md`,
   `plugin/specs/02-push-scheduler-backfill.md`, `plugin/specs/04-updates-distribution.md`,
   `plugin/specs/05-build-phases-gates.md`
+
+## 2026-09-11 · The action buttons never said what they do
+
+- **Type:** gap
+- **Trigger:** specs/03 §2 lists three actions — Test verbinding, Push nu, Historie pushen — and
+  specifies what each one DOES, but says nothing about explaining them on screen. Only "Historie
+  pushen" happens to carry a `<p class="description">`; "Push nu" carries none. Lasse, connecting
+  the first shop, asked what the difference between the two is, from the screen itself: the buttons
+  are named after their implementation (a push, a backfill) rather than after the moment somebody
+  needs them.
+- **Decision:** give every action its own one-line description under the Actions card, in the same
+  place the existing one lives, and say what a push CARRIES — the catalogue rides along on every
+  push, which is the part that makes products appear in Launch Hub and is invisible from the button
+  label. Spec updated to require it, so a fourth action cannot arrive unexplained.
+- **Rationale:** the person using this screen sets up a shop a few times a year and is not a
+  developer. "Push now" and "Push history" are distinguishable only if you already know there is a
+  rolling window — which is written in specs/02 and nowhere the operator will ever look. A label
+  that needs the spec to be understood is an unfinished label.
+- **Touches:** `plugin/specs/03-settings-admin-ui.md`, `plugin/includes/SettingsPage.php`,
+  `plugin/languages/launchup-sales-connector-nl_NL.po` (+ compiled `.mo`)

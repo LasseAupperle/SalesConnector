@@ -429,7 +429,19 @@ final class SettingsPage {
 			self::backfillEnabled( $status ) ? '' : 'disabled',
 			esc_html__( 'Push history', 'launchup-sales-connector' )
 		);
-		echo '</p><p class="description">' . esc_html__( 'Push history sends all months since the first order and doubles as a full re-sync (e.g. after a late refund on an old order).', 'launchup-sales-connector' ) . '</p>';
+		echo '</p>';
+
+		/*
+		 * Both buttons explained, not just the second one (specs/03 §2, DECISIONS 2026-09-11).
+		 *
+		 * "Push now" and "Push history" are named after what they call. From the screen alone there
+		 * is no way to tell them apart without already knowing a rolling window exists — and the
+		 * person on this screen connects a shop a few times a year. The catalogue line matters most:
+		 * it is why products appear in Launch Hub at all, and nothing on either button hints at it.
+		 */
+		echo '<p class="description">' . esc_html__( 'Push now sends this month and the two before it — the same thing the nightly job at 04:00 does.', 'launchup-sales-connector' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Push history sends all months since the first order and doubles as a full re-sync (e.g. after a late refund on an old order). Use it once when connecting the shop.', 'launchup-sales-connector' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Either way the shop also sends its published products, so they can be given a royalty in Launch Hub before they have sold anything.', 'launchup-sales-connector' ) . '</p>';
 		echo '</div>';
 
 		// --- Card 3: Status ----------------------------------------------

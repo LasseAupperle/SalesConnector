@@ -12,6 +12,12 @@ Submenu **WooCommerce → Launch Up Connector** (capability `manage_woocommerce`
 
 **Acties**
 - **Push nu** — enqueues `lusc_push_now`; inline "Gestart — resultaat verschijnt in de log."
+- Every action carries a one-line `<p class="description">` under the buttons saying **when** you
+  would press it, not what it calls. The operator sets up a shop a few times a year: a label named
+  after its implementation ("push", "backfill") is only distinguishable if you already know the
+  rolling window exists, and that is written in specs/02 where they will never look. State also
+  that the **catalogue rides along on every push** — that is what makes products appear in Launch
+  Hub, and nothing on the button says so.
 - **Historie pushen** — confirm dialog ("Pusht alle maanden vanaf de eerste order; loopt op de achtergrond en is veilig opnieuw uit te voeren — dient ook als volledige her-sync"); enqueues the backfill chain; disabled until a successful test/push exists. Re-running it is the supported **full re-sync** path (refreshes months older than the rolling window, e.g. late refunds on old orders).
 - After the **first** successful save+test, show a dismissible notice on this page suggesting the backfill (decision: history on activation, operationalized as one click here because the key can't exist before activation).
 

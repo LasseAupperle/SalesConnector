@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 8.1
 WC requires at least: 11.0
 WC tested up to: 11.1
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,6 +17,10 @@ Aggregates WooCommerce sales per month and pushes them to Launch Hub. No custome
 Internal Launch Up plugin installed on every creator WooCommerce shop. It aggregates sales per month (per parent product, ex VAT, net of refunds) and pushes them to Launch Hub's sales-ingest endpoint. It deliberately knows nothing about profit prices, contracts, or creators, and no customer data ever leaves the shop — only per-product quantities, revenue totals, and the shop name.
 
 == Changelog ==
+
+= 1.2.1 =
+* The action buttons now say when you would press them. "Push now" had no explanation at all, and nothing on either button mentioned that the shop also sends its published products — which is what makes them appear in Launch Hub.
+* New test: every string the plugin shows must have a Dutch translation. The previous gate checked three by hand, so any new string was guarded by nobody.
 
 = 1.2.0 =
 * Baseline moved to WordPress 7.0+ (tested 7.1) and WooCommerce 11.0+ (tested 11.1) — the versions a creator shop actually installs today. The WordPress floor is WooCommerce's own: the plugin uses no 7.x API.
