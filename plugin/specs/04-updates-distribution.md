@@ -26,7 +26,7 @@ With release assets enabled, WordPress on every creator shop sees a new tagged G
 2. Tag `vX.Y.Z` (semver: additive payload fields or features = minor; fixes = patch; counting-definition changes would be major and require a Launch Hub decision first — see CLAUDE ground rules).
 3. GitHub Action `release.yml` (on tag): `composer install --no-dev`, build `launchup-sales-connector.zip` containing only runtime files (plugin php, includes/, lib/, languages/, readme.txt, uninstall.php — excludes tests, wp-env, CI, composer dev artifacts), attach as the release asset.
 
-`readme.txt` headers: Requires at least **6.9** · Tested up to (current WP) · Requires PHP **8.1** · WC requires at least **10.0** · WC tested up to (fill per release) · License GPL-2.0-or-later.
+`readme.txt` headers: Requires at least **7.0** · Tested up to (current WP) · Requires PHP **8.1** · WC requires at least **11.0** · WC tested up to (fill per release) · License GPL-2.0-or-later.
 
 ## 4. Per-shop install guide (goes in README, written for Lasse)
 

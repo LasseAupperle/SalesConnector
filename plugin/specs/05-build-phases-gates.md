@@ -5,7 +5,7 @@ Same rules as the Launch Hub project: strict order, a phase is done only when it
 > **Dependency callout:** the Launch Hub addendum (launch-hub repo, `specs/14`) phases **A0 + A1 must be live** (at least on a staging Supabase) before plugin **phase 7**; phases 0-6 run fully standalone against fixtures/mocks.
 
 ## Phase 0 · Scaffold & CI
-Repo init, plugin skeleton (headers per specs/02 §5, HPOS declaration, WC-inactive guard, empty includes), composer (phpunit, wpcs/phpcs, dealerdirect installer), `.wp-env.json` (WP 6.9, latest WooCommerce, PHP 8.1), GitHub Actions `ci.yml` (phpcs + phpunit on PHP 8.1 and 8.3), GPL license, README stub.
+Repo init, plugin skeleton (headers per specs/02 §5, HPOS declaration, WC-inactive guard, empty includes), composer (phpunit, wpcs/phpcs, dealerdirect installer), `.wp-env.json` (WP 7.1, WooCommerce 11.1.0 — BOTH pinned, never one, PHP 8.1), GitHub Actions `ci.yml` (phpcs + phpunit on PHP 8.1 and 8.3), GPL license, README stub.
 **Gate 0**: CI green on a PR · `npx wp-env start` boots, plugin activates without notices/fatals with WooCommerce active · deactivating WooCommerce shows the guard notice instead of a fatal · HPOS shows the plugin as compatible (WooCommerce → Settings → Advanced → Features).
 
 ## Phase 1 · Aggregation engine (pure)

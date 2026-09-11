@@ -21,10 +21,10 @@ $fail = static function ( string $msg ): void {
 
 $required = array(
 	'/^=== Launch Up Sales Connector ===$/m'      => 'plugin name banner',
-	'/^Requires at least: 6\.9$/m'                => 'Requires at least 6.9',
+	'/^Requires at least: [\d.]+$/m'              => 'Requires at least',
 	'/^Tested up to: [\d.]+$/m'                   => 'Tested up to',
-	'/^Requires PHP: 8\.1$/m'                     => 'Requires PHP 8.1',
-	'/^WC requires at least: 10\.0$/m'            => 'WC requires at least 10.0',
+	'/^Requires PHP: [\d.]+$/m'                   => 'Requires PHP',
+	'/^WC requires at least: [\d.]+$/m'           => 'WC requires at least',
 	'/^WC tested up to: [\d.]+$/m'                => 'WC tested up to',
 	'/^Stable tag: [\d.]+$/m'                     => 'Stable tag',
 	'/^License: GPL-2\.0-or-later$/m'             => 'License GPL-2.0-or-later',
@@ -34,6 +34,33 @@ $required = array(
 foreach ( $required as $pattern => $label ) {
 	if ( 1 !== preg_match( $pattern, $readme ) ) {
 		$fail( "missing or malformed header: {$label}" );
+	}
+}
+
+/*
+ * The baseline itself is NOT hard-coded here.
+ *
+ * It used to be — '/^Requires at least: 6\.9$/' and friends — which made this lint fail the moment
+ * the baseline moved, and pointed at the linter instead of at anything real. Worse, it never
+ * checked the thing that actually breaks a shop: readme.txt and the plugin header disagreeing, so
+ * WordPress refuses to install on a site the listing says is supported.
+ *
+ * So the rule is agreement, not a literal. Change the baseline in the plugin header and this keeps
+ * guarding it, in both directions.
+ */
+$baseline = array(
+	'Requires at least'    => '/^ \* Requires at least: ([\d.]+)$/m',
+	'Requires PHP'         => '/^ \* Requires PHP:\s+([\d.]+)$/m',
+	'WC requires at least' => '/^ \* WC requires at least: ([\d.]+)$/m',
+	'WC tested up to'      => '/^ \* WC tested up to:\s+([\d.]+)$/m',
+);
+foreach ( $baseline as $header => $pattern ) {
+	if ( 1 !== preg_match( $pattern, $plugin, $from_plugin ) ) {
+		$fail( "plugin header has no {$header}" );
+	}
+	preg_match( '/^' . preg_quote( $header, '/' ) . ': ([\d.]+)$/m', $readme, $from_readme );
+	if ( $from_plugin[1] !== ( $from_readme[1] ?? '' ) ) {
+		$fail( "{$header}: readme.txt says '" . ( $from_readme[1] ?? '' ) . "', plugin header says '{$from_plugin[1]}'" );
 	}
 }
 
@@ -50,4 +77,4 @@ if ( false === strpos( $readme, '= ' . $version[1] . ' =' ) ) {
 	$fail( "changelog has no entry for {$version[1]}" );
 }
 
-echo "README LINT OK: headers complete, Stable tag {$stable[1]} == Version {$version[1]}, changelog entry present.\n";
+echo "README LINT OK: headers complete, baseline agrees with the plugin header, Stable tag {$stable[1]} == Version {$version[1]}, changelog entry present.\n";

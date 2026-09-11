@@ -35,7 +35,7 @@ Option `lusc_status`: `{ last_success_at, last_attempt_at, last_result: 'ok'|'fa
 
 ## 5. Bootstrap requirements (`launchup-sales-connector.php`)
 
-Plugin headers: Requires at least 6.9 · Requires PHP 8.1 · WC requires at least 10.0 · WC tested up to (fill at release). On `before_woocommerce_init`: `FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true)`. Hard guard: if WooCommerce inactive → admin notice + no-op (never fatal). Activation hook: schedule daily push; deactivation: unschedule all `lusc` group actions.
+Plugin headers: Requires at least 7.0 · Requires PHP 8.1 · WC requires at least 11.0 · WC tested up to (fill at release). The WordPress floor is set by WooCommerce, not by us — the plugin uses no 7.x API, 7.0 is simply the lowest core the required WooCommerce runs on (DECISIONS 2026-09-11). On `before_woocommerce_init`: `FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true)`. Hard guard: if WooCommerce inactive → admin notice + no-op (never fatal). Activation hook: schedule daily push; deactivation: unschedule all `lusc` group actions.
 
 ## 6. Acceptance criteria (phases 2-4 gates)
 

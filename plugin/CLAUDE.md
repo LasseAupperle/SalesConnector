@@ -18,7 +18,7 @@ WordPress plugin (`launchup-sales-connector`) installed on **every creator WooCo
 
 ## Baseline (pinned)
 
-- WordPress **6.9+**, WooCommerce **10.x**, PHP **8.1+** (declared in plugin headers and readme.txt)
+- WordPress **7.0+** (tested 7.1), WooCommerce **11.x** (tested 11.1), PHP **8.1+** (declared in plugin headers and readme.txt). The WordPress floor is WooCommerce's, not ours — see DECISIONS 2026-09-11. Pin BOTH core and WooCommerce in `.wp-env.json`; pinning one is what broke CI.
 - **HPOS-only mindset**: all order access via WooCommerce CRUD APIs (`wc_get_orders`, `WC_Order`, `$order->get_refunds()`). Never query `posts`/`postmeta` for orders. Declare compatibility on `before_woocommerce_init` via `FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true)`.
 - Scheduling via **Action Scheduler** (bundled with WooCommerce), never raw WP-Cron events.
 - Updates via **plugin-update-checker v5** against the public GitHub repo's releases.

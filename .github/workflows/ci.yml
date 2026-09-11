@@ -30,7 +30,7 @@ jobs:
         run: composer test --working-dir=plugin
 
   wp-env:
-    name: wp-env integration (WP 6.9, WooCommerce, PHP 8.1)
+    name: wp-env integration (WP 7.1, WooCommerce 11.1, PHP 8.1)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,15 +39,17 @@ jobs:
           node-version: '20'
       - name: Install Node dependencies
         run: npm install
-      # WooCommerce is PINNED in .wp-env.json, not latest-stable.
+      # BOTH core and WooCommerce are PINNED in .wp-env.json — never one, never latest-stable.
       #
-      # Core was pinned to the 6.9 branch and WooCommerce was not. When WooCommerce 11 raised its
-      # floor to WordPress 7.0 it simply stopped activating, and this job went red on every
-      # commit — including ones that changed no PHP. 10.9.4 is the last 10.x, which is the
-      # baseline plugin/CLAUDE.md declares (WP 6.9+, WooCommerce 10.x).
+      # Core was once pinned to a branch while WooCommerce floated. When WooCommerce 11 raised its
+      # floor to WordPress 7.0 it simply stopped activating, and this job went red on every commit,
+      # including ones that changed no PHP. The fix then was to pin WooCommerce back to 10.9.4;
+      # the fix now is to move the baseline forward instead (DECISIONS 2026-09-11), so the pair
+      # under test is the pair a creator shop actually installs: WP 7.1 + WooCommerce 11.1.0.
       #
-      # Pin BOTH sides or neither. Pinning one is what broke. The note lives here because
-      # wp-env validates .wp-env.json strictly and rejects any key it does not know.
+      # Bumping either pin is a deliberate act with a gate run behind it, not a default. The note
+      # lives here because wp-env validates .wp-env.json strictly and rejects any key it does not
+      # know.
       - name: Start wp-env
         run: npm run env:start
       - name: Activate plugin

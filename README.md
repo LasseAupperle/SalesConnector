@@ -8,7 +8,7 @@ WordPress plugin (`launchup-sales-connector`) installed on every Launch Up creat
 |---|---|
 | `plugin/` | The WordPress plugin (source, tests, specs). Start at `plugin/CLAUDE.md`. |
 | `plugin/specs/` | Authoritative feature specs (00-05). Build order: `plugin/specs/05-build-phases-gates.md`. |
-| `.wp-env.json` | Local/CI WordPress + WooCommerce environment (WP 6.9, PHP 8.1). |
+| `.wp-env.json` | Local/CI WordPress + WooCommerce environment (WP 7.1, WooCommerce 11.1.0, PHP 8.1). |
 
 ## Development
 

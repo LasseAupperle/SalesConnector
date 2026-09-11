@@ -1,12 +1,12 @@
 === Launch Up Sales Connector ===
 Contributors: launchup
 Tags: woocommerce, sales, reporting
-Requires at least: 6.9
-Tested up to: 6.9
+Requires at least: 7.0
+Tested up to: 7.1
 Requires PHP: 8.1
-WC requires at least: 10.0
-WC tested up to: 10.9
-Stable tag: 1.1.0
+WC requires at least: 11.0
+WC tested up to: 11.1
+Stable tag: 1.2.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,6 +17,10 @@ Aggregates WooCommerce sales per month and pushes them to Launch Hub. No custome
 Internal Launch Up plugin installed on every creator WooCommerce shop. It aggregates sales per month (per parent product, ex VAT, net of refunds) and pushes them to Launch Hub's sales-ingest endpoint. It deliberately knows nothing about profit prices, contracts, or creators, and no customer data ever leaves the shop — only per-product quantities, revenue totals, and the shop name.
 
 == Changelog ==
+
+= 1.2.0 =
+* Baseline moved to WordPress 7.0+ (tested 7.1) and WooCommerce 11.0+ (tested 11.1) — the versions a creator shop actually installs today. The WordPress floor is WooCommerce's own: the plugin uses no 7.x API.
+* Every CLI gate now runs against WordPress 7.1 with WooCommerce 11.1.0, both pinned.
 
 = 1.1.0 =
 * Contract v1.2: every order line now carries the shop's own product id (`external_ref`, e.g. `wc:412`), so Launch Hub can hold a royalty against a product instead of against its name. A product renamed mid-month stays one product; two products sharing a name stay two.
