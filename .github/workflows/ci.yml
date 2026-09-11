@@ -52,6 +52,13 @@ jobs:
       # know.
       - name: Start wp-env
         run: npm run env:start
+      - name: Say which WordPress and WooCommerce this actually ran on
+        # The pins are declared in .wp-env.json; this is the run SHOWING what it got.
+        # WooCommerce activating at all proves core >= 7.0, which is not the same as
+        # proving the pin held — and a gate's output is the only evidence there is.
+        run: |
+          npx wp-env run cli wp core version
+          npx wp-env run cli wp plugin get woocommerce --field=version
       - name: Activate plugin
         run: |
           npx wp-env run cli wp plugin activate launchup-sales-connector
